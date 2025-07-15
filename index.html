@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Manager Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <i class="fas fa-target"></i>
+                <span>Habit Manager Pro</span>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-tab" data-tab="habits">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Habits</span>
+                </button>
+                <button class="nav-tab" data-tab="goals">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Goals</span>
+                </button>
+                <button class="nav-tab" data-tab="tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tasks</span>
+                </button>
+                <button class="nav-tab" data-tab="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+                <button class="nav-tab" data-tab="achievements">
+                    <i class="fas fa-trophy"></i>
+                    <span>Achievements</span>
+                </button>
+            </div>
+            <div class="nav-actions">
+                <button class="user-level">
+                    <i class="fas fa-star"></i>
+                    <span>Level <span id="user-level">1</span></span>
+                </button>
+                <button class="points-display">
+                    <i class="fas fa-coins"></i>
+                    <span id="total-points">0</span>
+                </button>
+                <button class="settings-btn" id="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-header">
+                    <h1>Welcome Back!</h1>
+                    <p>Today is <span id="current-date"></span></p>
+                    <div class="mood-tracker">
+                        <label>Today's Mood:</label>
+                        <div class="mood-selector">
+                            <button class="mood-btn" data-mood="1">😢</button>
+                            <button class="mood-btn" data-mood="2">😐</button>
+                            <button class="mood-btn" data-mood="3">😊</button>
+                            <button class="mood-btn" data-mood="4">😄</button>
+                            <button class="mood-btn" data-mood="5">🤩</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="longest-streak">0</h3>
+                            <p>Longest Streak</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-completions">0</h3>
+                            <p>Total Completions</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="completion-rate">0%</h3>
+                            <p>Completion Rate</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="ai-score">0</h3>
+                            <p>AI Wellness Score</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="today-habits">
+                        <div class="section-title">
+                            <h2>Today's Habits</h2>
+                            <button class="pomodoro-btn" id="start-pomodoro">
+                                <i class="fas fa-clock"></i>
+                                Pomodoro
+                            </button>
+                        </div>
+                        <div id="today-habits-list"></div>
+                    </div>
+                    <div class="progress-overview">
+                        <h2>Progress Overview</h2>
+                        <div class="progress-rings">
+                            <div class="progress-ring">
+                                <svg width="120" height="120">
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-bg"></circle>
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-fill" id="daily-progress"></circle>
+                                </svg>
+                                <div class="progress-label">Daily</div>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="120" height="120">
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-bg"></circle>
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-fill" id="weekly-progress"></circle>
+                                </svg>
+                                <div class="progress-label">Weekly</div>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="120" height="120">
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-bg"></circle>
+                                    <circle cx="60" cy="60" r="45" class="progress-ring-fill" id="monthly-progress"></circle>
+                                </svg>
+                                <div class="progress-label">Monthly</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-insights">
+                    <div class="insights-card">
+                        <h2>AI Insights</h2>
+                        <div id="ai-insights"></div>
+                    </div>
+                    <div class="quotes-card">
+                        <h2>Daily Inspiration</h2>
+                        <div id="quotes-info"></div>
+                    </div>
+                </div>
+
+                <div class="activity-heatmap">
+                    <h2>Activity Heatmap</h2>
+                    <div id="heatmap-container"></div>
+                </div>
+            </div>
+
+            <!-- Habits Tab -->
+            <div class="tab-content" id="habits">
+                <div class="section-header">
+                    <h1>Habits</h1>
+                    <div class="habit-actions">
+                        <button class="secondary-btn" id="habit-templates-btn">
+                            <i class="fas fa-magic"></i>
+                            Templates
+                        </button>
+                        <button class="primary-btn" id="add-habit-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Habit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="habits-filter">
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="health">Health</option>
+                        <option value="productivity">Productivity</option>
+                        <option value="learning">Learning</option>
+                        <option value="mindfulness">Mindfulness</option>
+                        <option value="social">Social</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="creativity">Creativity</option>
+                        <option value="nutrition">Nutrition</option>
+                    </select>
+                    <select id="difficulty-filter">
+                        <option value="">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <input type="text" id="habit-search" placeholder="Search habits...">
+                </div>
+
+                <div class="habits-grid" id="habits-grid"></div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div class="tab-content" id="goals">
+                <div class="section-header">
+                    <h1>Goals</h1>
+                    <button class="primary-btn" id="add-goal-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Goal
+                    </button>
+                </div>
+
+                <div class="goals-filter">
+                    <select id="goal-filter">
+                        <option value="">All Goals</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                </div>
+
+                <div class="goals-grid" id="goals-grid"></div>
+            </div>
+
+            <!-- Tasks Tab -->
+            <div class="tab-content" id="tasks">
+                <div class="section-header">
+                    <h1>Tasks</h1>
+                    <button class="primary-btn" id="add-task-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Task
+                    </button>
+                </div>
+
+                <div class="tasks-view">
+                    <div class="task-calendar">
+                        <h2>Calendar View</h2>
+                        <div id="task-calendar"></div>
+                    </div>
+                    <div class="task-list">
+                        <h2>Task List</h2>
+                        <div class="task-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="today">Today</button>
+                            <button class="filter-btn" data-filter="week">This Week</button>
+                            <button class="filter-btn" data-filter="month">This Month</button>
+                        </div>
+                        <div id="tasks-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics">
+                <div class="section-header">
+                    <h1>Analytics</h1>
+                    <select id="analytics-period">
+                        <option value="week">Last Week</option>
+                        <option value="month">Last Month</option>
+                        <option value="quarter">Last Quarter</option>
+                        <option value="year">Last Year</option>
+                    </select>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3>Completion Trends</h3>
+                        <canvas id="completion-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Category Distribution</h3>
+                        <canvas id="category-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Streak Progress</h3>
+                        <canvas id="streak-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Monthly Overview</h3>
+                        <canvas id="monthly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Tab -->
+            <div class="tab-content" id="achievements">
+                <div class="section-header">
+                    <h1>Achievements</h1>
+                    <div class="achievement-stats">
+                        <span>Level <span id="achievement-level">1</span></span>
+                        <span><span id="achievement-points">0</span> Points</span>
+                    </div>
+                </div>
+
+                <div class="achievements-grid" id="achievements-grid"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="habit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="habit-modal-title">Add New Habit</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="habit-form">
+                    <div class="form-group">
+                        <label for="habit-name">Habit Name</label>
+                        <input type="text" id="habit-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-category">Category</label>
+                        <select id="habit-category" required>
+                            <option value="">Select Category</option>
+                            <option value="health">Health</option>
+                            <option value="productivity">Productivity</option>
+                            <option value="learning">Learning</option>
+                            <option value="mindfulness">Mindfulness</option>
+                            <option value="social">Social</option>
+                            <option value="fitness">Fitness</option>
+                            <option value="creativity">Creativity</option>
+                            <option value="nutrition">Nutrition</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-difficulty">Difficulty Level</label>
+                        <select id="habit-difficulty" required>
+                            <option value="">Select Difficulty</option>
+                            <option value="easy">Easy (1-5 min)</option>
+                            <option value="medium">Medium (5-30 min)</option>
+                            <option value="hard">Hard (30+ min)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-description">Description</label>
+                        <textarea id="habit-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-target">Target Frequency</label>
+                        <select id="habit-target" required>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-reminder">Reminder Time</label>
+                        <input type="time" id="habit-reminder">
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-dependencies">Dependencies</label>
+                        <select id="habit-dependencies" multiple>
+                            <option value="">No dependencies</option>
+                        </select>
+                        <small>Select habits that must be completed first</small>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="habit-photo-proof">
+                            Require photo proof of completion
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" id="cancel-habit">Cancel</button>
+                        <button type="submit" class="primary-btn">Save Habit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="habit-templates-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Habit Templates</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="templates-grid" id="templates-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="pomodoro-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Pomodoro Timer</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="pomodoro-timer">
+                    <div class="timer-display">
+                        <span id="timer-minutes">25</span>:<span id="timer-seconds">00</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="primary-btn" id="start-timer">Start</button>
+                        <button class="secondary-btn" id="pause-timer">Pause</button>
+                        <button class="secondary-btn" id="reset-timer">Reset</button>
+                    </div>
+                    <div class="timer-settings">
+                        <label for="work-duration">Work Duration (minutes):</label>
+                        <input type="number" id="work-duration" value="25" min="1" max="60">
+                        <label for="break-duration">Break Duration (minutes):</label>
+                        <input type="number" id="break-duration" value="5" min="1" max="30">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="photo-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Photo Proof</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="photo-capture">
+                    <input type="file" id="photo-input" accept="image/*" capture="environment">
+                    <div class="photo-preview" id="photo-preview"></div>
+                    <div class="photo-actions">
+                        <button class="primary-btn" id="take-photo">Take Photo</button>
+                        <button class="secondary-btn" id="cancel-photo">Cancel</button>
+                        <button class="primary-btn" id="confirm-photo" style="display:none;">Confirm Completion</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="goal-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="goal-modal-title">Add New Goal</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="goal-form">
+                    <div class="form-group">
+                        <label for="goal-title">Goal Title</label>
+                        <input type="text" id="goal-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-type">Goal Type</label>
+                        <select id="goal-type" required>
+                            <option value="">Select Type</option>
+                            <option value="youtube">YouTube Video</option>
+                            <option value="file">File/Document</option>
+                            <option value="general">General Goal</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="youtube-group" style="display: none;">
+                        <label for="youtube-url">YouTube URL</label>
+                        <input type="url" id="youtube-url" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    <div class="form-group" id="file-group" style="display: none;">
+                        <label for="goal-file">Upload File</label>
+                        <input type="file" id="goal-file" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg">
+                        <small>Max file size: 20MB</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-description">Description</label>
+                        <textarea id="goal-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-deadline">Deadline</label>
+                        <input type="date" id="goal-deadline">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" id="cancel-goal">Cancel</button>
+                        <button type="submit" class="primary-btn">Save Goal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="task-modal-title">Add New Task</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-title">Task Title</label>
+                        <input type="text" id="task-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-date">Date</label>
+                        <input type="date" id="task-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-category">Category</label>
+                        <select id="task-category" required>
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="health">Health</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" id="cancel-task">Cancel</button>
+                        <button type="submit" class="primary-btn">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <div class="settings-actions">
+                        <button class="secondary-btn" id="export-data">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                        <button class="secondary-btn" id="import-data">
+                            <i class="fas fa-upload"></i>
+                            Import Data
+                        </button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Reset Data</h3>
+                    <button class="danger-btn" id="reset-data">
+                        <i class="fas fa-trash"></i>
+                        Reset All Data
+                    </button>
+                    <small>This action cannot be undone</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- Data Warning Footer -->
+    <footer class="data-warning-footer">
+        <div class="warning-content">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">
+                <strong>Important:</strong> Your data is stored locally in your browser (5-10MB limit). 
+                Regular data exports are recommended to prevent loss if storage limits are exceeded.
+                <button class="export-quick-btn" onclick="habitManager.exportData()">
+                    <i class="fas fa-download"></i> Quick Export
+                </button>
+            </div>
+        </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
